@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "jejohndaiichiADF"
+		},
+		"jejohndaiichidb_connectionString": {
+			"value": ""
+		},
+		"jejohndaiichistorage_connectionString": {
+			"value": ""
+		},
+		"AzureBlob_StageFiles_properties_typeProperties_fileName": {
+			"value": "encounters.csv"
+		},
+		"AzureBlob_StageFiles_properties_typeProperties_folderPath": {
+			"value": "stage-file"
+		}
+	}
+}
