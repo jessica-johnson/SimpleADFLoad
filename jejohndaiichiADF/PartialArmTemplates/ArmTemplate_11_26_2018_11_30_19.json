@@ -1,0 +1,231 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "jejohndaiichiadf"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Load_Claims')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy Claims Data",
+						"type": "Copy",
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"typeProperties": {
+							"source": {
+								"type": "BlobSource",
+								"recursive": false
+							},
+							"sink": {
+								"type": "SqlSink",
+								"writeBatchSize": 10000,
+								"preCopyScript": "truncate table dbo.MedicareHospitalSpendingByClaim"
+							},
+							"enableStaging": false,
+							"dataIntegrationUnits": 0,
+							"translator": {
+								"type": "TabularTranslator",
+								"columnMappings": {
+									"Hospital_Name": "Hospital_Name",
+									"Provider_ID": "Provider_ID",
+									"State": "State",
+									"Period": "Period",
+									"Claim_Type": "Claim_Type",
+									"Avg_Spending_Per_Episode_Hospital": "Avg_Spending_Per_Episode_Hospital",
+									"Avg_Spending_Per_Episode_State": "Avg_Spending_Per_Episode_State",
+									"Avg_Spending_Per_Episode_Nation": "Avg_Spending_Per_Episode_Nation",
+									"Percent_of_Spending_Hospital": "Percent_of_Spending_Hospital",
+									"Percent_of_Spending_State": "Percent_of_Spending_State",
+									"Percent_of_Spending_Nation": "Percent_of_Spending_Nation",
+									"Start_Date": "Start_Date",
+									"End_Date": "End_Date"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "AzureBlob_StageFiles_Claims",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTable_Claims",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureBlob_StageFiles_Claims')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_Claims')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlob_StageFiles_Claims')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "jejohndaiichistorage",
+					"type": "LinkedServiceReference"
+				},
+				"type": "AzureBlob",
+				"structure": [
+					{
+						"name": "Hospital_Name",
+						"type": "String"
+					},
+					{
+						"name": "Provider_ID",
+						"type": "String"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Period",
+						"type": "String"
+					},
+					{
+						"name": "Claim_Type",
+						"type": "String"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_Hospital",
+						"type": "Int32"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_State",
+						"type": "Int32"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_Nation",
+						"type": "Int32"
+					},
+					{
+						"name": "Percent_of_Spending_Hospital",
+						"type": "String"
+					},
+					{
+						"name": "Percent_of_Spending_State",
+						"type": "String"
+					},
+					{
+						"name": "Percent_of_Spending_Nation",
+						"type": "String"
+					},
+					{
+						"name": "Start_Date",
+						"type": "String"
+					},
+					{
+						"name": "End_Date",
+						"type": "String"
+					}
+				],
+				"typeProperties": {
+					"format": {
+						"type": "TextFormat",
+						"columnDelimiter": ",",
+						"rowDelimiter": "",
+						"nullValue": "\\N",
+						"treatEmptyAsNull": true,
+						"skipLineCount": 0,
+						"firstRowAsHeader": true
+					},
+					"fileName": "MedicareHospitalSpendingByClaim_Data.csv",
+					"folderPath": "stage-file"
+				}
+			}
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable_Claims')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "jejohndaiichidb",
+					"type": "LinkedServiceReference"
+				},
+				"type": "AzureSqlTable",
+				"structure": [
+					{
+						"name": "Hospital_Name",
+						"type": "String"
+					},
+					{
+						"name": "Provider_ID",
+						"type": "Int32"
+					},
+					{
+						"name": "State",
+						"type": "String"
+					},
+					{
+						"name": "Period",
+						"type": "String"
+					},
+					{
+						"name": "Claim_Type",
+						"type": "String"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_Hospital",
+						"type": "Int32"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_State",
+						"type": "Int32"
+					},
+					{
+						"name": "Avg_Spending_Per_Episode_Nation",
+						"type": "Int32"
+					},
+					{
+						"name": "Percent_of_Spending_Hospital",
+						"type": "String"
+					},
+					{
+						"name": "Percent_of_Spending_State",
+						"type": "String"
+					},
+					{
+						"name": "Percent_of_Spending_Nation",
+						"type": "String"
+					},
+					{
+						"name": "Start_Date",
+						"type": "Int32"
+					},
+					{
+						"name": "End_Date",
+						"type": "Int32"
+					}
+				],
+				"typeProperties": {
+					"tableName": "[concat('[', 'dbo].[MedicareHospitalSpendingByClaim]')]"
+				}
+			}
+		}
+	]
+}
