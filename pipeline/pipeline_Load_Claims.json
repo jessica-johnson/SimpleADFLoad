@@ -1,0 +1,61 @@
+{
+	"name": "pipeline_Load_Claims",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Claims Data",
+				"type": "Copy",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "BlobSource",
+						"recursive": false
+					},
+					"sink": {
+						"type": "SqlSink",
+						"writeBatchSize": 10000,
+						"preCopyScript": "truncate table dbo.MedicareHospitalSpendingByClaim"
+					},
+					"enableStaging": false,
+					"dataIntegrationUnits": 0,
+					"translator": {
+						"type": "TabularTranslator",
+						"columnMappings": {
+							"Hospital_Name": "Hospital_Name",
+							"Provider_ID": "Provider_ID",
+							"State": "State",
+							"Period": "Period",
+							"Claim_Type": "Claim_Type",
+							"Avg_Spending_Per_Episode_Hospital": "Avg_Spending_Per_Episode_Hospital",
+							"Avg_Spending_Per_Episode_State": "Avg_Spending_Per_Episode_State",
+							"Avg_Spending_Per_Episode_Nation": "Avg_Spending_Per_Episode_Nation",
+							"Percent_of_Spending_Hospital": "Percent_of_Spending_Hospital",
+							"Percent_of_Spending_State": "Percent_of_Spending_State",
+							"Percent_of_Spending_Nation": "Percent_of_Spending_Nation",
+							"Start_Date": "Start_Date",
+							"End_Date": "End_Date"
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "AzureBlob_StageFiles_Claims",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable_Claims",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		]
+	}
+}
