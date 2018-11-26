@@ -1,0 +1,67 @@
+{
+	"name": "AzureSqlTable_Claims",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "jejohndaiichidb",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "Hospital_Name",
+				"type": "String"
+			},
+			{
+				"name": "Provider_ID",
+				"type": "Int32"
+			},
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "Period",
+				"type": "String"
+			},
+			{
+				"name": "Claim_Type",
+				"type": "String"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_Hospital",
+				"type": "Int32"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_State",
+				"type": "Int32"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_Nation",
+				"type": "Int32"
+			},
+			{
+				"name": "Percent_of_Spending_Hospital",
+				"type": "String"
+			},
+			{
+				"name": "Percent_of_Spending_State",
+				"type": "String"
+			},
+			{
+				"name": "Percent_of_Spending_Nation",
+				"type": "String"
+			},
+			{
+				"name": "Start_Date",
+				"type": "Int32"
+			},
+			{
+				"name": "End_Date",
+				"type": "Int32"
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[MedicareHospitalSpendingByClaim]"
+		}
+	}
+}
