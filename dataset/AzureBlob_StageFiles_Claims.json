@@ -1,0 +1,77 @@
+{
+	"name": "AzureBlob_StageFiles_Claims",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "jejohndaiichistorage",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureBlob",
+		"structure": [
+			{
+				"name": "Hospital_Name",
+				"type": "String"
+			},
+			{
+				"name": "Provider_ID",
+				"type": "String"
+			},
+			{
+				"name": "State",
+				"type": "String"
+			},
+			{
+				"name": "Period",
+				"type": "String"
+			},
+			{
+				"name": "Claim_Type",
+				"type": "String"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_Hospital",
+				"type": "Int32"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_State",
+				"type": "Int32"
+			},
+			{
+				"name": "Avg_Spending_Per_Episode_Nation",
+				"type": "Int32"
+			},
+			{
+				"name": "Percent_of_Spending_Hospital",
+				"type": "String"
+			},
+			{
+				"name": "Percent_of_Spending_State",
+				"type": "String"
+			},
+			{
+				"name": "Percent_of_Spending_Nation",
+				"type": "String"
+			},
+			{
+				"name": "Start_Date",
+				"type": "String"
+			},
+			{
+				"name": "End_Date",
+				"type": "String"
+			}
+		],
+		"typeProperties": {
+			"format": {
+				"type": "TextFormat",
+				"columnDelimiter": ",",
+				"rowDelimiter": "",
+				"nullValue": "\\N",
+				"treatEmptyAsNull": true,
+				"skipLineCount": 0,
+				"firstRowAsHeader": true
+			},
+			"fileName": "MedicareHospitalSpendingByClaim_Data.csv",
+			"folderPath": "stage-file"
+		}
+	}
+}
