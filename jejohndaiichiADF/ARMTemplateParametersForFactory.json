@@ -3,19 +3,13 @@
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 		"factoryName": {
-			"value": "jejohndaiichiadf"
+			"value": "jejohndaiichiADF"
 		},
 		"jejohndaiichidb_connectionString": {
 			"value": ""
 		},
 		"jejohndaiichistorage_connectionString": {
 			"value": ""
-		},
-		"AzureBlob_StageFiles_properties_typeProperties_fileName": {
-			"value": "encounters.csv"
-		},
-		"AzureBlob_StageFiles_properties_typeProperties_folderPath": {
-			"value": "stage-file"
 		},
 		"AzureBlob_StageFiles_Claims_properties_typeProperties_fileName": {
 			"value": "MedicareHospitalSpendingByClaim_Data.csv"

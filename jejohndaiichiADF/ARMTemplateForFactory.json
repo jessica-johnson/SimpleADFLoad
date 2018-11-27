@@ -5,7 +5,7 @@
 		"factoryName": {
 			"type": "string",
 			"metadata": "Data Factory Name",
-			"defaultValue": "jejohndaiichiadf"
+			"defaultValue": "jejohndaiichiADF"
 		},
 		"jejohndaiichidb_connectionString": {
 			"type": "secureString",
@@ -14,14 +14,6 @@
 		"jejohndaiichistorage_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'jejohndaiichistorage'"
-		},
-		"AzureBlob_StageFiles_properties_typeProperties_fileName": {
-			"type": "string",
-			"defaultValue": "encounters.csv"
-		},
-		"AzureBlob_StageFiles_properties_typeProperties_folderPath": {
-			"type": "string",
-			"defaultValue": "stage-file"
 		},
 		"AzureBlob_StageFiles_Claims_properties_typeProperties_fileName": {
 			"type": "string",
@@ -106,141 +98,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/AzureBlob_StageFiles_Claims')]",
 				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_Claims')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline_Load_Encounters')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy Encounter",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "BlobSource",
-								"recursive": true
-							},
-							"sink": {
-								"type": "SqlSink",
-								"writeBatchSize": 10000,
-								"preCopyScript": "truncate table dbo.encounters"
-							},
-							"enableStaging": false,
-							"dataIntegrationUnits": 0,
-							"translator": {
-								"type": "TabularTranslator",
-								"columnMappings": {
-									"ID": "ID",
-									"START": "START",
-									"STOP": "STOP",
-									"PATIENT": "PATIENT",
-									"CODE": "CODE",
-									"DESCRIPTION": "DESCRIPTION",
-									"COST": "COST",
-									"REASONCODE": "REASONCODE",
-									"REASONDESCRIPTION": "REASONDESCRIPTION"
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "AzureBlob_StageFiles",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSqlTable_Encounters",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AzureBlob_StageFiles')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTable_Encounters')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlob_StageFiles')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "jejohndaiichistorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureBlob",
-				"structure": [
-					{
-						"name": "ID",
-						"type": "String"
-					},
-					{
-						"name": "START",
-						"type": "DateTime"
-					},
-					{
-						"name": "STOP",
-						"type": "DateTime"
-					},
-					{
-						"name": "PATIENT",
-						"type": "String"
-					},
-					{
-						"name": "CODE",
-						"type": "Int32"
-					},
-					{
-						"name": "DESCRIPTION",
-						"type": "String"
-					},
-					{
-						"name": "COST",
-						"type": "Decimal"
-					},
-					{
-						"name": "REASONCODE",
-						"type": "String"
-					},
-					{
-						"name": "REASONDESCRIPTION",
-						"type": "String"
-					}
-				],
-				"typeProperties": {
-					"format": {
-						"type": "TextFormat",
-						"columnDelimiter": ",",
-						"rowDelimiter": "",
-						"nullValue": "\\N",
-						"treatEmptyAsNull": true,
-						"skipLineCount": 0,
-						"firstRowAsHeader": true
-					},
-					"fileName": "[parameters('AzureBlob_StageFiles_properties_typeProperties_fileName')]",
-					"folderPath": "[parameters('AzureBlob_StageFiles_properties_typeProperties_folderPath')]"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/jejohndaiichistorage')]"
 			]
 		},
 		{
@@ -393,63 +250,6 @@
 				],
 				"typeProperties": {
 					"tableName": "[concat('[', 'dbo].[MedicareHospitalSpendingByClaim]')]"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/jejohndaiichidb')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureSqlTable_Encounters')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "jejohndaiichidb",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"structure": [
-					{
-						"name": "ID",
-						"type": "String"
-					},
-					{
-						"name": "START",
-						"type": "DateTime"
-					},
-					{
-						"name": "STOP",
-						"type": "DateTime"
-					},
-					{
-						"name": "PATIENT",
-						"type": "String"
-					},
-					{
-						"name": "CODE",
-						"type": "Int32"
-					},
-					{
-						"name": "DESCRIPTION",
-						"type": "String"
-					},
-					{
-						"name": "COST",
-						"type": "Double"
-					},
-					{
-						"name": "REASONCODE",
-						"type": "String"
-					},
-					{
-						"name": "REASONDESCRIPTION",
-						"type": "String"
-					}
-				],
-				"typeProperties": {
-					"tableName": "[concat('[', 'dbo].[encounters]')]"
 				}
 			},
 			"dependsOn": [
